@@ -1,13 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Worker Example</title>
+</head>
+
+<body>
+  <h1>Web Worker Example</h1>
+  <p>Enter two numbers to add:</p>
+  <input type="number" id="number1" placeholder="Enter number 1">
+  <input type="number" id="number2" placeholder="Enter number 2">
+  <button onclick="calculateSum()">Calculate Sum</button>
+  <p id="result"></p>
+
+  <script src="./src/main.ts"></script>
+</body>
+
 </html>

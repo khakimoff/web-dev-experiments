@@ -1,24 +1,23 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
-
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
-
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+function calculateSum() {
+    const number1Input = document.getElementById('number1') as HTMLInputElement;
+    const number2Input = document.getElementById('number2') as HTMLInputElement;
+    const textContenr =   document.getElementById('result') as HTMLElement;
+  
+    const number1 = parseInt(number1Input.value);
+    const number2 = parseInt(number2Input.value);
+  
+    if (isNaN(number1) || isNaN(number2)) {
+      // Handle the case where input values are not valid numbers
+      textContenr.textContent = "Please enter a valid value"
+      return;
+    } 
+  
+    const worker = new Worker('./src/worker.ts');
+  
+    worker.postMessage({ num1: number1, num2: number2 });
+  
+    worker.onmessage = function (event) {
+      const result = event.data;
+      textContenr.textContent = `Sum: ${result}`;
+    };
+  }
