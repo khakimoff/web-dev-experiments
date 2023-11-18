@@ -1,13 +1,77 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndexedDB Example</title>
+</head>
+
+<body>
+  <h1>IndexedDB Example</h1>
+  <button onclick="addData()">Add Data</button>
+  <button onclick="readData()">Read Data</button>
+
+  <script>
+    // Open or create a database
+    const dbName = 'sampleDB';
+    const request = indexedDB.open(dbName, 1);
+    let db;
+
+    request.onupgradeneeded = function (event) {
+      // Create an object store (like a table in a relational database)
+      const db = event.target.result;
+      const objectStore = db.createObjectStore('people', { keyPath: 'id', autoIncrement: true });
+
+      // Define object store properties
+      objectStore.createIndex('name', 'name', { unique: false });
+      objectStore.createIndex('email', 'email', { unique: true });
+
+      console.log('Database setup complete');
+    };
+
+    request.onsuccess = function (event) {
+      db = event.target.result;
+      console.log('Database opened successfully');
+    };
+
+    request.onerror = function (event) {
+      console.error('Database error: ' + event.target.errorCode);
+    };
+
+    function addData() {
+      const transaction = db.transaction(['people'], 'readwrite');
+      const objectStore = transaction.objectStore('people');
+
+      // Add data to the object store
+      const request = objectStore.add({ name: 'John Doe', email: 'john@example.com' });
+
+      request.onsuccess = function (event) {
+        console.log('Data added successfully');
+      };
+
+      request.onerror = function (event) {
+        console.error('Error adding data: ' + event.target.errorCode);
+      };
+    }
+
+    function readData() {
+      const transaction = db.transaction(['people'], 'readonly');
+      const objectStore = transaction.objectStore('people');
+
+      // Get all data from the object store
+      const request = objectStore.getAll();
+
+      request.onsuccess = function (event) {
+        const data = event.target.result;
+        console.log('Data read successfully:', data);
+      };
+
+      request.onerror = function (event) {
+        console.error('Error reading data: ' + event.target.errorCode);
+      };
+    }
+  </script>
+</body>
+
 </html>
